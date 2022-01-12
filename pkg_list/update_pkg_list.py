@@ -49,6 +49,7 @@ def requestWandoujia(pkg, url):
     resp = requests.get(url)
     notFount = resp.text.__contains__("豌豆们没有找到这个页面")
     if notFount:
+        print("[{0}, url: {1}]"% pkg % url)
         pkg_model.pop(pkg)
 
 
@@ -57,8 +58,8 @@ def work(_token):
     readFile()
     print("内存结构: ", len(pkg_model))
     # 去除没有内存没有值. eg: com.sz.cleanmaster
-    # for pkg in pkg_model.keys():
-    #     requestWandoujia(pkg, base_wandoujia.format(pkg))
+    for pkg in pkg_model.keys():
+        requestWandoujia(pkg, base_wandoujia.format(pkg))
     ## 其他地方另存结果
     if len(pkg_model)>0:
         with open(result_file, "w") as csvfile:

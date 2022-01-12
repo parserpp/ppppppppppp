@@ -35,39 +35,23 @@ jobs:
         continue-on-error: true
         run: ls
 
-      - name: Send mail
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.163.com
-          server_port: 465
-          #          server_address: smtp.gmail.com
-          #          server_port: 465
-          username: ${{ secrets.MAILUSERNAME }}
-          password: ${{ secrets.MAILPASSWORD }}
-          subject: "包名验证成果"
-          to: ${{ secrets.MAIL_LIST }}
-          from: GithubActions
-          secure: true
-          #  body:  |
-          #    Build job ( ${{ github.job }} ) of ${{ github.repository }} completed successfully!
-          #    Commit msg: ${{ github.event.head_commit.message }}
-          #html_body: file://result.html
-          ignore_cert: true
-          priority: low
-          attachments: ./pkg_result.csv
-
-
-#     - name: Install dependencies
-#       run: |
-#         conda env update --file environment.yml --name base
-#     - name: Lint with flake8
-#       run: |
-#         conda install flake8
-#         # stop the build if there are Python syntax errors or undefined names
-#         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-#         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-#         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-#     - name: Test with pytest
-#       run: |
-#         conda install pytest
-#         pytest
+#      - name: Send mail
+#        uses: dawidd6/action-send-mail@v3
+#        with:
+#          server_address: smtp.163.com
+#          server_port: 465
+#          #          server_address: smtp.gmail.com
+#          #          server_port: 465
+#          username: ${{ secrets.MAILUSERNAME }}
+#          password: ${{ secrets.MAILPASSWORD }}
+#          subject: "包名验证成果"
+#          to: ${{ secrets.MAIL_LIST }}
+#          from: GithubActions
+#          secure: true
+#          #  body:  |
+#          #    Build job ( ${{ github.job }} ) of ${{ github.repository }} completed successfully!
+#          #    Commit msg: ${{ github.event.head_commit.message }}
+#          #html_body: file://result.html
+#          ignore_cert: true
+#          priority: low
+#          attachments: ./pkg_result.csv
