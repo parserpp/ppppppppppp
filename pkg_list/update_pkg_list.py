@@ -40,7 +40,7 @@ def readFile():
             pkg = row[1]
             m = Model(row[0], row[1])
             pkg_model[pkg] = m
-            # print("add ", pkg, " success. d: ", len(pkg_model))
+            print("add ", pkg, " success. d: ", len(pkg_model))
 
 '''
 豌豆荚包含该app,判断后，减少内存的结构。
@@ -62,19 +62,20 @@ def work(_token):
         requestWandoujia(pkg, base_wandoujia.format(pkg))
     ## 其他地方另存结果
     if len(pkg_model)>0:
-        with open(result_file, "w") as csvfile:
-            for pkg in pkg_model.keys():
-                model = pkg_model[pkg]
-                appname=model.app_name
+        for pkg in pkg_model.keys():
+            model = pkg_model[pkg]
+            appname = model.app_name
+            with open(result_file, "w") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow([appname, pkg])
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        work(sys.argv[1])
-    else:
-        print("入参不对,即将停止")
+    work("")
+    # if len(sys.argv) > 1:
+    #     work(sys.argv[1])
+    # else:
+    #     print("入参不对,即将停止")
 
 
 #
