@@ -61,7 +61,7 @@ def work(_token):
     #     requestWandoujia(pkg, base_wandoujia.format(pkg))
     ## 其他地方另存结果
     if len(pkg_model)>0:
-        with open("test.csv", "w") as csvfile:
+        with open(result_file, "w") as csvfile:
             for pkg in pkg_model.keys():
                 model = pkg_model[pkg]
                 appname=model.app_name

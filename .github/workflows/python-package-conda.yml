@@ -1,23 +1,69 @@
-name: Python Package using Conda
+name: Python Package
 
-on: [push]
+on: [ push ]
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 5
+    #    strategy:
+    #      max-parallel: 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.10
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
+      - name: Set up JDK 11
+          uses: actions/setup-java@v2
+          with:
+            java-version: '11'
+            distribution: 'adopt'
+
+      - name: clone code
+        shell: bash
+        continue-on-error: true
+        run: |
+          git clone https://oauth2:${{ secrets.GTOKEN }}@github.com/parserpp/data.git
+          cp data/appList.csv  pkg.csv
+          echo "clone success. cat info"
+          ls
+
+      - name: prepare python env
+          shell: bash
+          continue-on-error: true
+          run: |
+            pip install -r requirements.txt
+            echo "===========env success=============="
+            python pkg_list/update_pkg_list.py ${{ secrets.GTOKEN }}
+
+      - name: ls cat info when success
+          shell: bash
+          continue-on-error: true
+          run: ls
+
+      - name: Send mail
+          uses: dawidd6/action-send-mail@v3
+          with:
+            server_address: smtp.163.com
+            server_port: 465
+            #          server_address: smtp.gmail.com
+            #          server_port: 465
+            username: ${{ secrets.MAILUSERNAME }}
+            password: ${{ secrets.MAILPASSWORD }}
+            subject: "包名验证成果"
+            to: ${{ secrets.MAIL_LIST }}
+            from: GithubActions
+            secure: true
+            #  body:  |
+            #    Build job ( ${{ github.job }} ) of ${{ github.repository }} completed successfully!
+            #    Commit msg: ${{ github.event.head_commit.message }}
+            #html_body: file://result.html
+            ignore_cert: true
+            priority: low
+            attachments: ./pkg_result.csv
+
+
 #     - name: Install dependencies
 #       run: |
 #         conda env update --file environment.yml --name base
