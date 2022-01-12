@@ -28,7 +28,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           echo "===========env success=============="
-          python pkg_list/update_pkg_list.py  ${{ secrets.GTOKEN }}  "xxx"
+          python update_pkg_list.py  ${{ secrets.GTOKEN }}  
 
       - name: ls cat info when success
         shell: bash
