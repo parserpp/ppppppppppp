@@ -49,7 +49,7 @@ def requestWandoujia(pkg, url):
     resp = requests.get(url)
     notFount = resp.text.__contains__("豌豆们没有找到这个页面")
     if notFount:
-        print("[{0}, url: {1}]"% pkg % url)
+        print("pkg: {0} not fount!".format(pkg) )
         pkg_model.pop(pkg)
 
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 #
 # """
 # 文件太大无法下载
-# curl -i -H "Authorization: token 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" \
+# curl -i -H "Authorization: token ${token}" \
 #     https://api.github.com/repos/parserpp/data/contents/appList.csv
 #
 # Error msg
