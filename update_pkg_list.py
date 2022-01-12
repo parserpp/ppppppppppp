@@ -60,7 +60,6 @@ def work(_token):
     print("内存结构: ", len(pkg_model))
     ## 去除没有内存没有值. eg: com.sz.cleanmaster
     for pkg in pkg_model.keys():
-        print(pkg+"---"+base_wandoujia.format(pkg))
         requestWandoujia(pkg, base_wandoujia.format(pkg))
     ## 其他地方另存结果
     for pkg in pkg_model.keys():
