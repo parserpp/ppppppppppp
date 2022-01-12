@@ -23,38 +23,38 @@ jobs:
           ls
 
       - name: prepare python env
-          shell: bash
-          continue-on-error: true
-          run: |
-            pip install -r requirements.txt
-            echo "===========env success=============="
-            python pkg_list/update_pkg_list.py ${{ secrets.GTOKEN }}
+        shell: bash
+        continue-on-error: true
+        run: |
+          pip install -r requirements.txt
+          echo "===========env success=============="
+          python pkg_list/update_pkg_list.py ${{ secrets.GTOKEN }}
 
       - name: ls cat info when success
-          shell: bash
-          continue-on-error: true
-          run: ls
+        shell: bash
+        continue-on-error: true
+        run: ls
 
       - name: Send mail
-          uses: dawidd6/action-send-mail@v3
-          with:
-            server_address: smtp.163.com
-            server_port: 465
-            #          server_address: smtp.gmail.com
-            #          server_port: 465
-            username: ${{ secrets.MAILUSERNAME }}
-            password: ${{ secrets.MAILPASSWORD }}
-            subject: "包名验证成果"
-            to: ${{ secrets.MAIL_LIST }}
-            from: GithubActions
-            secure: true
-            #  body:  |
-            #    Build job ( ${{ github.job }} ) of ${{ github.repository }} completed successfully!
-            #    Commit msg: ${{ github.event.head_commit.message }}
-            #html_body: file://result.html
-            ignore_cert: true
-            priority: low
-            attachments: ./pkg_result.csv
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.163.com
+          server_port: 465
+          #          server_address: smtp.gmail.com
+          #          server_port: 465
+          username: ${{ secrets.MAILUSERNAME }}
+          password: ${{ secrets.MAILPASSWORD }}
+          subject: "包名验证成果"
+          to: ${{ secrets.MAIL_LIST }}
+          from: GithubActions
+          secure: true
+          #  body:  |
+          #    Build job ( ${{ github.job }} ) of ${{ github.repository }} completed successfully!
+          #    Commit msg: ${{ github.event.head_commit.message }}
+          #html_body: file://result.html
+          ignore_cert: true
+          priority: low
+          attachments: ./pkg_result.csv
 
 
 #     - name: Install dependencies
