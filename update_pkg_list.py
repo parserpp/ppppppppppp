@@ -53,6 +53,8 @@ def requestWandoujia(pkg, url):
     if notFount:
         print("pkg: {0} not fount!".format(pkg))
         pkg_model.pop(pkg)
+    else:
+        print(pkg + "----success")
 
 
 def work(_token):
