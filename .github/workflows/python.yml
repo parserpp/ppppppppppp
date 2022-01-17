@@ -36,6 +36,7 @@ jobs:
         run: |
           ls
           type chromedriver
+          chromedriver
 
 #      - name: Send mail
 #        uses: dawidd6/action-send-mail@v3
