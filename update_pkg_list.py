@@ -6,8 +6,12 @@
 获取数据,包名
 """
 import csv
+import os
+import sys
 
 import requests
+
+import github_api
 
 base_wandoujia = "https://www.wandoujia.com/apps/{0}"
 base_yingyongbao = "https://webcdn.m.qq.com/webapp/homepage/index.html#/appDetail?apkName={0}"
@@ -32,16 +36,6 @@ class Model(object):
         self.package_name = __package_name
 
 
-def readFile():
-    with open(pkg_file, 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            pkg = row[1]
-            m = Model(row[0], row[1])
-            pkg_model[pkg] = m
-            # print("add ", pkg, " success. d: ", len(pkg_model))
-
-
 '''
 豌豆荚包含该app,判断后，减少内存的结构。
 '''
@@ -57,8 +51,33 @@ def requestWandoujia(pkg, url):
         print(pkg + "----success")
 
 
-def work(_token):
-    readFile()
+"""
+支持开头和持续步长（切片）
+"""
+def readFile(_sbegin: int = 0, _keepCount: int = 0):
+    with open(pkg_file, 'r', encoding='utf-8') as f:
+
+        reader = csv.reader(f)
+        if (int(_keepCount) > 0):
+            dur = int(_keepCount + _sbegin)
+            print("readFile read [" + str(_keepCount) + ", " + str(dur) + " ]")
+            for index, row in enumerate(reader):
+                if index >= int(_sbegin) and index < dur:
+                    pkg = row[1]
+                    m = Model(row[0], row[1])
+                    pkg_model[pkg] = m
+        else:
+            print("readFile read all")
+            for row in reader:
+                pkg = row[1]
+                m = Model(row[0], row[1])
+                pkg_model[pkg] = m
+                # print("add ", pkg, " success. d: ", len(pkg_model))
+
+
+def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _keepCount: int = 0):
+    readFile(_sbegin, _keepCount)
+
     print("内存结构: ", len(pkg_model))
     ## 去除没有内存没有值. eg: com.sz.cleanmaster
     for pkg in pkg_model.keys():
@@ -70,57 +89,29 @@ def work(_token):
         with open(result_file, "w") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow([appname, pkg])
+    github_api.create_file(_owner="parserpp"
+                           ,_repo="data"
+                           ,_path="/pkgs/"+str(_sbegin)+"_"+str(_keepCount)+".csv"
+                           ,_token=_token
+                           ,_filename=result_file
+                           ,_commit_msg="ppppp"
+                           ,_name="who are U"
+                           )
 
 
+"""
+argv：
+   token: github token
+   s1: start_index 开始下标
+   s2: step 步长。持续数量
+"""
 if __name__ == '__main__':
-    work("")
-    # if len(sys.argv) > 1:
-    #     work(sys.argv[1])
-    # else:
-    #     print("入参不对,即将停止")
-
-#
-#
-# pkg_url = "https://raw.githubusercontent.com/parserpp/data/main/appList.csv?token={0}"
-#
-# """
-# 文件太大无法下载
-# curl -i -H "Authorization: token ${token}" \
-#     https://api.github.com/repos/parserpp/data/contents/appList.csv
-#
-# Error msg
-# This API returns blobs up to 1 MB in size. The requested blob is too large to fetch via the API,
-#  but you can use the Git Data API to request blobs up to 100 MB in size
-# """
-# def getpkgFile(_token):
-#     resp = requests.get(pkg_url.format(_token))
-#     resp.encoding = 'utf-8'
-#     print(resp.text)
-#     pass
-#
-#
-# def parser_line(line):
-#     # requests.request(url.format())
-#     temp1 = line.strip()
-#     temp2 = temp1.split(',')
-#     print(temp2)
-#     pass
-#
-# """
-#  应用宝检查需要：开启javascript
-# https://webcdn.m.qq.com/webapp/homepage/index.html#/appDetail?apkName=com.UCMobile
-#
-# """
-# from bs4 import BeautifulSoup
-# def requestYingyongbao(url):
-#     headers = {
-#         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36',
-#         }
-#     resp = requests.get(url, headers=headers)
-#     resp.encoding = 'utf-8'
-#     # print(resp.content)
-#     # print(resp.text)
-#     soup = BeautifulSoup(resp.text, 'html.parser')
-#     print(soup)
-#
-#     pass
+    # work("xxxx", 0, 1000)
+    if len(sys.argv) > 1:
+        token = sys.argv[1]
+        _s1 = sys.argv[2]
+        _s2 = sys.argv[3]
+        work(token, _s1, _s2)
+    else:
+        print("入参不对,即将开启所有的工作模式")
+        work()

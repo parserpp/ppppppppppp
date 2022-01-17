@@ -5,6 +5,10 @@ on: [ push ]
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        start_index: [0,1000]
+        steps: [1000]
 
     steps:
       - uses: actions/checkout@v2
@@ -22,13 +26,13 @@ jobs:
           echo "clone success. cat info"
           ls
 
-#      - name: prepare python env
-#        shell: bash
-#        continue-on-error: true
-#        run: |
-#          pip install -r requirements.txt
-#          echo "===========env success=============="
-#          python update_pkg_list.py  ${{ secrets.GTOKEN }}
+      - name: prepare python env
+        shell: bash
+        continue-on-error: true
+        run: |
+          pip install -r requirements.txt
+          echo "===========env success=============="
+          python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.start_index }}
 
       - name: ls cat info when success
         shell: bash

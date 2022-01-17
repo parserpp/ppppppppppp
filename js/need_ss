@@ -1,0 +1,46 @@
+
+#
+#
+# pkg_url = "https://raw.githubusercontent.com/parserpp/data/main/appList.csv?token={0}"
+#
+# """
+# 文件太大无法下载
+# curl -i -H "Authorization: token ${token}" \
+#     https://api.github.com/repos/parserpp/data/contents/appList.csv
+#
+# Error msg
+# This API returns blobs up to 1 MB in size. The requested blob is too large to fetch via the API,
+#  but you can use the Git Data API to request blobs up to 100 MB in size
+# """
+# def getpkgFile(_token):
+#     resp = requests.get(pkg_url.format(_token))
+#     resp.encoding = 'utf-8'
+#     print(resp.text)
+#     pass
+#
+#
+# def parser_line(line):
+#     # requests.request(url.format())
+#     temp1 = line.strip()
+#     temp2 = temp1.split(',')
+#     print(temp2)
+#     pass
+#
+# """
+#  应用宝检查需要：开启javascript
+# https://webcdn.m.qq.com/webapp/homepage/index.html#/appDetail?apkName=com.UCMobile
+#
+# """
+# from bs4 import BeautifulSoup
+# def requestYingyongbao(url):
+#     headers = {
+#         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.162 Safari/537.36',
+#         }
+#     resp = requests.get(url, headers=headers)
+#     resp.encoding = 'utf-8'
+#     # print(resp.content)
+#     # print(resp.text)
+#     soup = BeautifulSoup(resp.text, 'html.parser')
+#     print(soup)
+#
+#     pass
