@@ -22,18 +22,20 @@ jobs:
           echo "clone success. cat info"
           ls
 
-      - name: prepare python env
-        shell: bash
-        continue-on-error: true
-        run: |
-          pip install -r requirements.txt
-          echo "===========env success=============="
-          python update_pkg_list.py  ${{ secrets.GTOKEN }}  
+#      - name: prepare python env
+#        shell: bash
+#        continue-on-error: true
+#        run: |
+#          pip install -r requirements.txt
+#          echo "===========env success=============="
+#          python update_pkg_list.py  ${{ secrets.GTOKEN }}
 
       - name: ls cat info when success
         shell: bash
         continue-on-error: true
-        run: ls
+        run: |
+          ls
+          type chromedriver
 
 #      - name: Send mail
 #        uses: dawidd6/action-send-mail@v3
