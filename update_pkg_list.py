@@ -112,18 +112,20 @@ def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _step: int = 0)
     for pkg in pkg_model.keys():
         if isFountInWandoujia(pkg, base_wandoujia.format(pkg)):
             success_pkg_model[pkg] = pkg_model[pkg]
-    print("检测完成，成功个数: ", len(success_pkg_model))
-    ## 其他地方另存结果
-    for pkg in success_pkg_model.keys():
-        try:
-            model = success_pkg_model[pkg]
-            appname = model.app_name
-            # 写文件需要追加
-            with open(result_file, "w+") as csvfile:
+    print("[%d-%d] 检测完成，成功个数: %d", len(success_pkg_model))
+    # 写文件需要追加
+    with open(result_file, "w+") as csvfile:
+        ## 其他地方另存结果
+        for pkg in success_pkg_model.keys():
+            try:
+                model = success_pkg_model[pkg]
+                appname = model.app_name
+                print(appname + "-------" + pkg)
                 writer = csv.writer(csvfile)
                 writer.writerow([appname, pkg])
-        except Exception as e:
-            print("[" + pkg + "] happen Exception")
+            except Exception as e:
+                print("[" + pkg + "] happen Exception")
+
     github_api.create_file(_owner="parserpp"
                            , _repo="data"
                            , _path="/pkgs/" + str(_sbegin) + "_" + str(_step) + ".csv"
@@ -151,6 +153,7 @@ if __name__ == '__main__':
         print("入参不对,即将开启所有的工作模式")
         # work()
 
+    # work("", 0, 10)
     # work("", 1000, 1000)
     # work("", 2000, 1000)
     # work("", 3000, 1000)
