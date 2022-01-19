@@ -34,6 +34,7 @@ pkg_file = "pkg.csv"
 result_file = "pkg_result.csv"
 
 pkg_model = {}
+success_pkg_model = {}
 
 
 class Model(object):
@@ -50,41 +51,16 @@ class Model(object):
         self.package_name = __package_name
 
 
-'''
-豌豆荚包含该app,判断后，减少内存的结构。
-'''
-
-
-def requestWandoujia(pkg, url):
-    try:
-        resp = requests.get(url
-                            , headers=HEADER
-                            , timeout=3
-                            , verify=False
-                            )
-        if "豌豆们没有找到这个页面" in resp.text:
-            print("pkg: {0} not fount!".format(pkg))
-            pkg_model.pop(pkg)
-        else:
-            print(pkg + "----success")
-    except Exception as e:
-        print(e)
-
-
-"""
-支持开头和持续步长（切片）
-"""
-
-
-def readFile(_sbegin: int = 0, _keepCount: int = 0):
+# 支持开头和持续步长（切片）
+def readFile(_sbegin: int = 0, _steps: int = 0):
     with open(pkg_file, 'r', encoding='utf-8') as f:
 
         reader = csv.reader(f)
-        if (int(_keepCount) > 0):
-            dur = int(_keepCount + _sbegin)
-            print("readFile read [" + str(_keepCount) + ", " + str(dur) + " ]")
+        if (_steps > 0):
+            dur = _steps + _sbegin
+            print("readFile read [" + str(_steps) + ", " + str(dur) + " ]")
             for index, row in enumerate(reader):
-                if index >= int(_sbegin) and index < dur:
+                if index >= _sbegin and index < dur:
                     pkg = row[1]
                     m = Model(row[0], row[1])
                     pkg_model[pkg] = m
@@ -97,31 +73,52 @@ def readFile(_sbegin: int = 0, _keepCount: int = 0):
                 # print("add ", pkg, " success. d: ", len(pkg_model))
 
 
-def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _keepCount: int = 0):
-    readFile(_sbegin, _keepCount)
+# 豌豆荚包含该app
+def isFountInWandoujia(pkg, url):
+    try:
+        resp = requests.get(url
+                            , headers=HEADER
+                            , timeout=3
+                            , verify=False
+                            )
+        if "豌豆们没有找到这个页面" in resp.text:
+            print("pkg: {0} not fount!".format(pkg))
+            return False
+        else:
+            print(pkg + "----success")
+            return True
+    except Exception as e:
+        print(e)
+        return False
+
+
+def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _step: int = 0):
+    readFile(_sbegin, _step)
 
     print("内存结构: ", len(pkg_model))
-    ## 去除没有内存没有值. eg: com.sz.cleanmaster
-    for pkg in pkg_model.keys():
-        requestWandoujia(pkg, base_wandoujia.format(pkg))
-    ## 其他地方另存结果
-    for pkg in pkg_model.keys():
-        try:
-            model = pkg_model[pkg]
-            appname = model.app_name
-            with open(result_file, "w") as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow([appname, pkg])
-        except Exception as e:
-            print("[" + pkg + "] happen Exception")
-    github_api.create_file(_owner="parserpp"
-                           , _repo="data"
-                           , _path="/pkgs/" + str(_sbegin) + "_" + str(_keepCount) + ".csv"
-                           , _token=_token
-                           , _filename=result_file
-                           , _commit_msg="ppppp"
-                           , _name="who are U"
-                           )
+    # ## 去除没有内存没有值. eg: com.sz.cleanmaster
+    # for pkg in pkg_model.keys():
+    #     if isFountInWandoujia(pkg, base_wandoujia.format(pkg)):
+    #         success_pkg_model[pkg] = pkg_model[pkg]
+    # print("检测完成，成功个数: ", len(success_pkg_model))
+    # ## 其他地方另存结果
+    # for pkg in success_pkg_model.keys():
+    #     try:
+    #         model = success_pkg_model[pkg]
+    #         appname = model.app_name
+    #         with open(result_file, "w") as csvfile:
+    #             writer = csv.writer(csvfile)
+    #             writer.writerow([appname, pkg])
+    #     except Exception as e:
+    #         print("[" + pkg + "] happen Exception")
+    # github_api.create_file(_owner="parserpp"
+    #                        , _repo="data"
+    #                        , _path="/pkgs/" + str(_sbegin) + "_" + str(_step) + ".csv"
+    #                        , _token=_token
+    #                        , _filename=result_file
+    #                        , _commit_msg="ppppp"
+    #                        , _name="who are U"
+    #                        )
 
 
 """
@@ -136,9 +133,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         print("收到多个参数： " + str(sys.argv))
         token = sys.argv[1]
-        _s1 = sys.argv[2]
-        _s2 = sys.argv[3]
-        work(token, _s1, _s2)
+        begin_index = int(sys.argv[2])
+        step_len = int(sys.argv[3])
+        work(token, begin_index, step_len)
     else:
         print("入参不对,即将开启所有的工作模式")
         # work()
