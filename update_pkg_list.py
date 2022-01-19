@@ -118,7 +118,8 @@ def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _step: int = 0)
         try:
             model = success_pkg_model[pkg]
             appname = model.app_name
-            with open(result_file, "w") as csvfile:
+            # 写文件需要追加
+            with open(result_file, "w+") as csvfile:
                 writer = csv.writer(csvfile)
                 writer.writerow([appname, pkg])
         except Exception as e:
