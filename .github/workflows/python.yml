@@ -7,8 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        start_index: [0]
-        steps: [1000]
+        start_index: [ 0,1000,2000,3000 ]
+        steps: [ 1000 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -34,13 +34,13 @@ jobs:
           echo "===========env success=============="
           python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.start_index }}
 
-      - name: ls cat info when success
-        shell: bash
-        continue-on-error: true
-        run: |
-          ls
-          type chromedriver
-          chromedriver
+#      - name: ls cat info when success
+#        shell: bash
+#        continue-on-error: true
+#        run: |
+#          ls
+#          type chromedriver
+#          chromedriver
 
 #      - name: Send mail
 #        uses: dawidd6/action-send-mail@v3
