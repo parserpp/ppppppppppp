@@ -49,6 +49,15 @@ class Model(object):
         self.package_name = __package_name
 
 
+# 定义一个进度条
+def process_bar(num, total):
+    rate = float(num) / total
+    ratenum = int(100 * rate)
+    r = '\r[{}{}]{}%'.format('*' * ratenum, ' ' * (100 - ratenum), ratenum)
+    sys.stdout.write(r)
+    sys.stdout.flush()
+
+
 # 支持开头和持续步长（切片）
 def readFile(_sbegin: int = 0, _steps: int = 0):
     with open(pkg_file, 'r', encoding='utf-8') as f:
@@ -59,7 +68,8 @@ def readFile(_sbegin: int = 0, _steps: int = 0):
             for index, row in enumerate(reader):
 
                 if index >= _sbegin and index < dur:
-                    print("[", str(_sbegin) , "---" , str(dur) + "] index : ", index)
+                    # print("[" + str(_sbegin) + "---" + str(dur) + "] index: " + str(index))
+                    process_bar(index - _sbegin, _steps)
                     pkg = row[1]
                     m = Model(row[0], row[1])
                     pkg_model[pkg] = m
@@ -70,6 +80,7 @@ def readFile(_sbegin: int = 0, _steps: int = 0):
                 m = Model(row[0], row[1])
                 pkg_model[pkg] = m
                 # print("add ", pkg, " success. d: ", len(pkg_model))
+        print("\r\n")
 
 
 # 豌豆荚包含该app
@@ -95,29 +106,29 @@ def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _step: int = 0)
     readFile(_sbegin, _step)
 
     print("[%d-%d] 读取文件完毕,内存数量:%d " % (_sbegin, (_sbegin + _step), len(pkg_model)))
-    # ## 去除没有内存没有值. eg: com.sz.cleanmaster
-    # for pkg in pkg_model.keys():
-    #     if isFountInWandoujia(pkg, base_wandoujia.format(pkg)):
-    #         success_pkg_model[pkg] = pkg_model[pkg]
-    # print("检测完成，成功个数: ", len(success_pkg_model))
-    # ## 其他地方另存结果
-    # for pkg in success_pkg_model.keys():
-    #     try:
-    #         model = success_pkg_model[pkg]
-    #         appname = model.app_name
-    #         with open(result_file, "w") as csvfile:
-    #             writer = csv.writer(csvfile)
-    #             writer.writerow([appname, pkg])
-    #     except Exception as e:
-    #         print("[" + pkg + "] happen Exception")
-    # github_api.create_file(_owner="parserpp"
-    #                        , _repo="data"
-    #                        , _path="/pkgs/" + str(_sbegin) + "_" + str(_step) + ".csv"
-    #                        , _token=_token
-    #                        , _filename=result_file
-    #                        , _commit_msg="ppppp"
-    #                        , _name="who are U"
-    #                        )
+    ## 去除没有内存没有值. eg: com.sz.cleanmaster
+    for pkg in pkg_model.keys():
+        if isFountInWandoujia(pkg, base_wandoujia.format(pkg)):
+            success_pkg_model[pkg] = pkg_model[pkg]
+    print("检测完成，成功个数: ", len(success_pkg_model))
+    ## 其他地方另存结果
+    for pkg in success_pkg_model.keys():
+        try:
+            model = success_pkg_model[pkg]
+            appname = model.app_name
+            with open(result_file, "w") as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([appname, pkg])
+        except Exception as e:
+            print("[" + pkg + "] happen Exception")
+    github_api.create_file(_owner="parserpp"
+                           , _repo="data"
+                           , _path="/pkgs/" + str(_sbegin) + "_" + str(_step) + ".csv"
+                           , _token=_token
+                           , _filename=result_file
+                           , _commit_msg="ppppp"
+                           , _name="who are U"
+                           )
 
 
 """
