@@ -10,6 +10,20 @@ import os
 import sys
 
 import requests
+import urllib3
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+urllib3.disable_warnings()
+requests.packages.urllib3.disable_warnings()
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+from fake_useragent import UserAgent
+
+ua = UserAgent()
+
+HEADER = {'User-Agent': ua.random,
+          'Accept': '*/*',
+          'Connection': 'keep-alive',
+          'Accept-Language': 'zh-CN,zh;q=0.8'}
 
 import github_api
 
@@ -42,7 +56,11 @@ class Model(object):
 
 
 def requestWandoujia(pkg, url):
-    resp = requests.get(url)
+    resp = requests.get(url
+                        , headers=HEADER
+                        , timeout=3
+                        , verify=False
+                        )
     notFount = resp.text.__contains__("豌豆们没有找到这个页面")
     if notFount:
         print("pkg: {0} not fount!".format(pkg))
@@ -54,6 +72,7 @@ def requestWandoujia(pkg, url):
 """
 支持开头和持续步长（切片）
 """
+
 def readFile(_sbegin: int = 0, _keepCount: int = 0):
     with open(pkg_file, 'r', encoding='utf-8') as f:
 
@@ -90,12 +109,12 @@ def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _keepCount: int
             writer = csv.writer(csvfile)
             writer.writerow([appname, pkg])
     github_api.create_file(_owner="parserpp"
-                           ,_repo="data"
-                           ,_path="/pkgs/"+str(_sbegin)+"_"+str(_keepCount)+".csv"
-                           ,_token=_token
-                           ,_filename=result_file
-                           ,_commit_msg="ppppp"
-                           ,_name="who are U"
+                           , _repo="data"
+                           , _path="/pkgs/" + str(_sbegin) + "_" + str(_keepCount) + ".csv"
+                           , _token=_token
+                           , _filename=result_file
+                           , _commit_msg="ppppp"
+                           , _name="who are U"
                            )
 
 
@@ -107,12 +126,13 @@ argv：
 """
 if __name__ == '__main__':
     # work("xxxx", 0, 1000)
-    print(sys.argv)
-    # if len(sys.argv) > 1:
-    #     token = sys.argv[1]
-    #     _s1 = sys.argv[2]
-    #     _s2 = sys.argv[3]
-    #     work(token, _s1, _s2)
-    # else:
-    #     print("入参不对,即将开启所有的工作模式")
-    #     work()
+    # print(sys.argv)
+    if len(sys.argv) > 1:
+        print("收到多个参数： " +str(sys.argv))
+        token = sys.argv[1]
+        _s1 = sys.argv[2]
+        _s2 = sys.argv[3]
+        work(token, _s1, _s2)
+    else:
+        print("入参不对,即将开启所有的工作模式")
+        # work()
