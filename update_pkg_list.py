@@ -64,12 +64,11 @@ def process_bar(num, total):
 def readFile(_sbegin: int = 0, _steps: int = 0):
     with open(pkg_file, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
-        if (_steps > 0):
+        if _steps > 0:
             dur = _steps + _sbegin
             # print("readFile read [" + str(_sbegin) + "---" + str(dur) + " ]")
             for index, row in enumerate(reader):
-
-                if index >= _sbegin and index < dur:
+                if (index >= _sbegin) and (index < dur):
                     # print("[" + str(_sbegin) + "---" + str(dur) + "] index: " + str(index))
                     process_bar(index - _sbegin, _steps)
                     pkg = row[1]
@@ -93,15 +92,28 @@ def isFountInWandoujia(pkg, url):
                             , timeout=3
                             , verify=False
                             )
-        if "豌豆们没有找到这个页面" in resp.text:
-            print("pkg: {0} not fount!".format(pkg))
-            return False
+
+        # print(pkg + "--->" + str(resp.status_code) + "-----" + resp.text)
+        # print(pkg+"--->"+ str(resp.status_code))
+        if resp.status_code == 200:
+            # from bs4 import BeautifulSoup
+            # resp.encoding = 'utf-8'  #
+            # soup = BeautifulSoup(resp.text, 'lxml')
+            if "抱歉" in resp.text:
+                print("pkg: {0} 抱歉  not fount!".format(pkg))
+                return False
+            elif "相似应用下载" in resp.text:
+                print("pkg: {0} 相似应用下载  not fount!".format(pkg))
+                return False
+            else:
+                print(pkg + "-----200----")
+                return True
         else:
-            print(pkg + "----success")
-            return True
+            return False
     except Exception as e:
         print(e)
         return False
+    return False
 
 
 def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _step: int = 0):
@@ -113,27 +125,32 @@ def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _step: int = 0)
         if isFountInWandoujia(pkg, base_wandoujia.format(pkg)):
             success_pkg_model[pkg] = pkg_model[pkg]
     print("[%d-%d] 检测完成，成功个数: %d", len(success_pkg_model))
-    # 写文件需要追加
-    with open(result_file, "w+") as csvfile:
-        ## 其他地方另存结果
-        for pkg in success_pkg_model.keys():
-            try:
-                model = success_pkg_model[pkg]
-                appname = model.app_name
-                print(appname + "-------" + pkg)
-                writer = csv.writer(csvfile)
-                writer.writerow([appname, pkg])
-            except Exception as e:
-                print("[" + pkg + "] happen Exception")
+    if len(success_pkg_model) > 0:
+        # 查找关联应用
 
-    github_api.create_file(_owner="parserpp"
-                           , _repo="data"
-                           , _path="/pkgs/" + str(_sbegin) + "_" + str(_step) + ".csv"
-                           , _token=_token
-                           , _filename=result_file
-                           , _commit_msg="ppppp"
-                           , _name="who are U"
-                           )
+        # 写文件需要追加
+        with open(result_file, "w+") as csvfile:
+            ## 其他地方另存结果
+            for pkg in success_pkg_model.keys():
+                try:
+                    model = success_pkg_model[pkg]
+                    appname = model.app_name
+                    print(appname + "-------" + pkg)
+                    writer = csv.writer(csvfile)
+                    writer.writerow([appname, pkg])
+                except Exception as e:
+                    print("[" + pkg + "] happen Exception")
+
+        github_api.create_file(_owner="parserpp"
+                               , _repo="data"
+                               , _path="/pkgs/" + str(_sbegin) + "_" + str(_step) + ".csv"
+                               , _token=_token
+                               , _filename=result_file
+                               , _commit_msg="ppppp"
+                               , _name="who are U"
+                               )
+    else:
+        print("木有成功的啊")
 
 
 """
@@ -151,7 +168,7 @@ if __name__ == '__main__':
         work(token, begin_index, step_len)
     else:
         print("入参不对,即将开启所有的工作模式")
-        # work()
+        work()
 
     # work("", 0, 10)
     # work("", 1000, 1000)

@@ -166,3 +166,4 @@ venv
 dist/
 .idea/
 pkg.csv
+*.bak
