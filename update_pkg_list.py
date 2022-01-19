@@ -16,12 +16,11 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-from fake_useragent import UserAgent
-
-ua = UserAgent(verify_ssl=False)
+# from fake_useragent import UserAgent
+# ua = UserAgent(verify_ssl=False)
 
 HEADER = {
-        'User-Agent': ua.random,
+        # 'User-Agent': ua.random,
           'Accept': '*/*',
           'Connection': 'keep-alive',
           'Accept-Language': 'zh-CN,zh;q=0.8'}
