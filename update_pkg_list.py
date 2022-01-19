@@ -18,9 +18,10 @@ requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 from fake_useragent import UserAgent
 
-ua = UserAgent(use_cache_server=False)
+ua = UserAgent(verify_ssl=False)
 
-HEADER = {'User-Agent': ua.random,
+HEADER = {
+        'User-Agent': ua.random,
           'Accept': '*/*',
           'Connection': 'keep-alive',
           'Accept-Language': 'zh-CN,zh;q=0.8'}
