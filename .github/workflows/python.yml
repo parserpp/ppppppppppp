@@ -34,13 +34,12 @@ jobs:
           echo "===========env success=============="
           python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.start_index }}
 
-#      - name: ls cat info when success
-#        shell: bash
-#        continue-on-error: true
-#        run: |
-#          ls
-#          type chromedriver
-#          chromedriver
+      - name:  cat info when success
+        shell: bash
+        continue-on-error: true
+        run: |
+          type chromedriver
+          chromedriver --help
 
 #      - name: Send mail
 #        uses: dawidd6/action-send-mail@v3
