@@ -56,22 +56,25 @@ class Model(object):
 
 
 def requestWandoujia(pkg, url):
-    resp = requests.get(url
-                        , headers=HEADER
-                        , timeout=3
-                        , verify=False
-                        )
-    notFount = resp.text.__contains__("豌豆们没有找到这个页面")
-    if notFount:
-        print("pkg: {0} not fount!".format(pkg))
-        pkg_model.pop(pkg)
-    else:
-        print(pkg + "----success")
+    try:
+        resp = requests.get(url
+                            , headers=HEADER
+                            , timeout=3
+                            , verify=False
+                            )
+        if "豌豆们没有找到这个页面" in resp.text:
+            print("pkg: {0} not fount!".format(pkg))
+            pkg_model.pop(pkg)
+        else:
+            print(pkg + "----success")
+    except Exception as e:
+        print(e)
 
 
 """
 支持开头和持续步长（切片）
 """
+
 
 def readFile(_sbegin: int = 0, _keepCount: int = 0):
     with open(pkg_file, 'r', encoding='utf-8') as f:
@@ -103,11 +106,14 @@ def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _keepCount: int
         requestWandoujia(pkg, base_wandoujia.format(pkg))
     ## 其他地方另存结果
     for pkg in pkg_model.keys():
-        model = pkg_model[pkg]
-        appname = model.app_name
-        with open(result_file, "w") as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow([appname, pkg])
+        try:
+            model = pkg_model[pkg]
+            appname = model.app_name
+            with open(result_file, "w") as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow([appname, pkg])
+        except Exception as e:
+            print("[" + pkg + "] happen Exception")
     github_api.create_file(_owner="parserpp"
                            , _repo="data"
                            , _path="/pkgs/" + str(_sbegin) + "_" + str(_keepCount) + ".csv"
@@ -128,7 +134,7 @@ if __name__ == '__main__':
     # work("xxxx", 0, 1000)
     # print(sys.argv)
     if len(sys.argv) > 1:
-        print("收到多个参数： " +str(sys.argv))
+        print("收到多个参数： " + str(sys.argv))
         token = sys.argv[1]
         _s1 = sys.argv[2]
         _s2 = sys.argv[3]
