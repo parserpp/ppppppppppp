@@ -32,18 +32,30 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      - name: work
-        shell: bash
-        continue-on-error: true
-        run: |
-          python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
-
-#      - name: cat info when success
+#      - name: work
 #        shell: bash
 #        continue-on-error: true
 #        run: |
-#          type chromedriver
-#          chromedriver --help
+#          python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
+
+      - name: cat chromedriver
+        shell: bash
+        continue-on-error: true
+        run: |
+          type chromedriver
+          chromedriver --help
+
+      - name: cat chrome
+        shell: bash
+        continue-on-error: true
+        run: |
+          type chrome
+
+      - name: test baseRequest
+        shell: bash
+        continue-on-error: true
+        run: |
+          python baseRequest.py
 
 #      - name: Send mail
 #        uses: dawidd6/action-send-mail@v3
