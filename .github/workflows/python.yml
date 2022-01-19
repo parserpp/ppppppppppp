@@ -34,7 +34,7 @@ jobs:
           echo "===========env success=============="
           python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
 
-      - name:  cat info when success
+      - name: cat info when success
         shell: bash
         continue-on-error: true
         run: |
