@@ -20,12 +20,10 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # ua = UserAgent(verify_ssl=False)
 
 HEADER = {
-        # 'User-Agent': ua.random,
-          'Accept': '*/*',
-          'Connection': 'keep-alive',
-          'Accept-Language': 'zh-CN,zh;q=0.8'}
-
-import github_api
+    # 'User-Agent': ua.random,
+    'Accept': '*/*',
+    'Connection': 'keep-alive',
+    'Accept-Language': 'zh-CN,zh;q=0.8'}
 
 base_wandoujia = "https://www.wandoujia.com/apps/{0}"
 base_yingyongbao = "https://webcdn.m.qq.com/webapp/homepage/index.html#/appDetail?apkName={0}"
@@ -54,18 +52,19 @@ class Model(object):
 # 支持开头和持续步长（切片）
 def readFile(_sbegin: int = 0, _steps: int = 0):
     with open(pkg_file, 'r', encoding='utf-8') as f:
-
         reader = csv.reader(f)
         if (_steps > 0):
             dur = _steps + _sbegin
-            print("readFile read [" + str(_steps) + ", " + str(dur) + " ]")
+            # print("readFile read [" + str(_sbegin) + "---" + str(dur) + " ]")
             for index, row in enumerate(reader):
+
                 if index >= _sbegin and index < dur:
+                    print("[", str(_sbegin) , "---" , str(dur) + "] index : ", index)
                     pkg = row[1]
                     m = Model(row[0], row[1])
                     pkg_model[pkg] = m
         else:
-            print("readFile read all")
+            # print("readFile read all")
             for row in reader:
                 pkg = row[1]
                 m = Model(row[0], row[1])
@@ -95,7 +94,7 @@ def isFountInWandoujia(pkg, url):
 def work(_token=os.getenv('GITHUB_TOKEN', ""), _sbegin: int = 0, _step: int = 0):
     readFile(_sbegin, _step)
 
-    print("内存结构: ", len(pkg_model))
+    print("[%d-%d] 读取文件完毕,内存数量:%d " % (_sbegin, (_sbegin + _step), len(pkg_model)))
     # ## 去除没有内存没有值. eg: com.sz.cleanmaster
     # for pkg in pkg_model.keys():
     #     if isFountInWandoujia(pkg, base_wandoujia.format(pkg)):
@@ -128,8 +127,6 @@ argv：
    s2: step 步长。持续数量
 """
 if __name__ == '__main__':
-    # work("xxxx", 0, 1000)
-    # print(sys.argv)
     if len(sys.argv) > 1:
         print("收到多个参数： " + str(sys.argv))
         token = sys.argv[1]
@@ -139,3 +136,9 @@ if __name__ == '__main__':
     else:
         print("入参不对,即将开启所有的工作模式")
         # work()
+
+    # work("", 1000, 1000)
+    # work("", 2000, 1000)
+    # work("", 3000, 1000)
+    # work("", 4000, 1000)
+    # work("", 5000, 1000)
