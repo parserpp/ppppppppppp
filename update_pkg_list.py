@@ -107,11 +107,12 @@ argv：
 """
 if __name__ == '__main__':
     # work("xxxx", 0, 1000)
-    if len(sys.argv) > 1:
-        token = sys.argv[1]
-        _s1 = sys.argv[2]
-        _s2 = sys.argv[3]
-        work(token, _s1, _s2)
-    else:
-        print("入参不对,即将开启所有的工作模式")
-        work()
+    print(sys.argv)
+    # if len(sys.argv) > 1:
+    #     token = sys.argv[1]
+    #     _s1 = sys.argv[2]
+    #     _s2 = sys.argv[3]
+    #     work(token, _s1, _s2)
+    # else:
+    #     print("入参不对,即将开启所有的工作模式")
+    #     work()
