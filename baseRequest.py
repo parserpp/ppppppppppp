@@ -8,13 +8,13 @@ urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
-chrome_options = Options()  # 实例化Option对象
-chrome_options.add_argument('--headless')  # 把Chrome浏览器设置为静默模式
-chrome_options.add_argument('--disable-gpu')  # 禁止加载图片
-driver = webdriver.Chrome(options=chrome_options)  # 设置引擎为Chrome，在后台默默运行
-
 
 def request(appname, pkg, url):
+    chrome_options = Options()  # 实例化Option对象
+    chrome_options.add_argument('--headless')  # 把Chrome浏览器设置为静默模式
+    chrome_options.add_argument('--disable-gpu')  # 禁止加载图片
+    driver = webdriver.Chrome(options=chrome_options)  # 设置引擎为Chrome，在后台默默运行
+
     driver.get(url)
     print("=================webdriver=before[" + appname + "]======================")
 
