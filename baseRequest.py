@@ -73,3 +73,9 @@ if __name__ == '__main__':
     print("===============正常,可分析=======================")
     request("微信", "com.tencent.mm", "https://www.wandoujia.com/apps/com.tencent.mm")
     get("微信", "com.tencent.mm", "https://www.wandoujia.com/apps/com.tencent.mm")
+
+    print("===============排行榜======================")
+    print("===============排行榜=======================")
+    print("===============排行榜=======================")
+    request("排行榜", "com.tencent.mm", "https://www.wandoujia.com/top/app")
+    get("排行榜", "com.tencent.mm", "https://www.wandoujia.com/top/app")
