@@ -32,11 +32,11 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-            - name: work
-              shell: bash
-              continue-on-error: true
-              run: |
-                python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
+      - name: work
+        shell: bash
+        continue-on-error: true
+        run: |
+          python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
 
       - name: cat chromedriver
         shell: bash
