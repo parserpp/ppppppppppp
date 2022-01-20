@@ -5,10 +5,10 @@ on: [ push ]
 jobs:
   build-linux:
     runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
-#        start_index: [ 0,1000,2000,3000,5000,6000,7000,8000,9000,10000 ]
-#        steps: [ 1000 ]
+    strategy:
+      matrix:
+        start_index: [ 0,1000,2000,3000,5000,6000,7000,8000,9000,10000 ]
+        steps: [ 1000 ]
 
     steps:
       - uses: actions/checkout@v2
@@ -32,11 +32,11 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-      #      - name: work
-      #        shell: bash
-      #        continue-on-error: true
-      #        run: |
-      #          python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
+            - name: work
+              shell: bash
+              continue-on-error: true
+              run: |
+                python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
 
       - name: cat chromedriver
         shell: bash
@@ -45,17 +45,11 @@ jobs:
           type chromedriver
           chromedriver --help
 
-      - name: cat chrome
-        shell: bash
-        continue-on-error: true
-        run: |
-          type chrome
-
-      - name: test baseRequest
-        shell: bash
-        continue-on-error: true
-        run: |
-          python baseRequest.py
+#      - name: test baseRequest
+#        shell: bash
+#        continue-on-error: true
+#        run: |
+#          python baseRequest.py
 
 #      - name: Send mail
 #        uses: dawidd6/action-send-mail@v3

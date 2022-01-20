@@ -66,14 +66,75 @@
 
 ### 特征
 
+
+
 * selenium
     - 状态:  没找到入口
-    - 标题:
+    - 标题: {语音拨号【测试应用名字】}相似应用下载_豌豆荚
     - 内容-包含
-        *
+        *  有图片（文字  安装豌豆荚,下载相似应用）  image.uc.cn/s/uae/g/0n/wenshan/1.png(div.app-offline-down中)
+    - 内容-不包含（div.download-wp中）
+        * 普通下载
+        * 安全下载
 * requests
     - 状态:404
     - 特殊性,resp.text里直接是完整html
-    - 内容-标题：
+    - 内容-标题：{语音拨号【测试应用名字】}相似应用下载_豌豆荚
     - 内容-包含
-        *
+        * 有图片（文字  安装豌豆荚,下载相似应用）  image.uc.cn/s/uae/g/0n/wenshan/1.png(div.app-offline-down中)
+    - 内容-不包含（div.download-wp中）
+        * 普通下载
+        * 安全下载
+
+* 有下载样例数据
+```
+<div class="download-wp">
+      <span id="checkBox"
+        class="check-box active"
+        data-spm-anchor-id="0.0.0.i0.47dd93dcz6ykNm">
+        需优先下载<br>豌豆荚安装
+      </span>
+     <a class="normal-dl-btn "
+        data-bd-track="detail-common_download_main"
+        href="https://www.wandoujia.com/apps/596157/download/dot?ch=detail_normal_dl" data-app-name="微信"
+        style="display: none;">
+        普通下载</a>
+     <a data-app-id="596157"
+        data-app-vid="601102578"
+        data-app-name="微信"
+        data-app-pname="com.tencent.mm"
+        data-app-vcode="2060"
+        data-app-vname="8.0.18"
+        data-app-icon="https://android-artworks.25pp.com/fs08/2022/01/14/0/106_17fe5fb22842eb378ed65f99a26e678c_con_130x130.png"
+        data-app-rtype="0"
+        data-oe="web"
+        data-type="bind"
+        data-feat="binded" data-app-categoryid="5014"
+        data-app-subcategoryid=""
+        data-install="21.5亿"
+        data-like="50.00%"
+        data-name="微信"
+        data-pn="com.tencent.mm"
+        class="install-btn i-source" rel="nofollow"
+        href="https://www.wandoujia.com/apps/596157/binding?source=web_direct_binded"
+        data-bd-track="detail-save_download_main"
+        data-track="detail-download-bind_direct_com.tencent.mm"
+        bind-init="true"
+        style="">
+         安全下载 </a>
+</div>
+```
+
+* 不能下载页面
+
+```
+<div
+    class="app-offline-down"
+    data-track="detail-download-offlineWdj"
+    data-app-name="语音拨号"
+    data-app-icon="https://android-artworks.25pp.com/fs08/2016/06/07/8/1_491ad3f5aed7d3be83bcc29aa210c704_con_130x130.png">
+        <img
+        src="//image.uc.cn/s/uae/g/0n/wenshan/1.png"
+        alt="语音拨号下载">
+</div>
+```

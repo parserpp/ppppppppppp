@@ -93,21 +93,25 @@ def isFountInWandoujia(pkg, url):
                             , verify=False
                             )
 
-        # print(pkg + "--->" + str(resp.status_code) + "-----" + resp.text)
-        # print(pkg+"--->"+ str(resp.status_code))
         if resp.status_code == 200:
-            # from bs4 import BeautifulSoup
-            # resp.encoding = 'utf-8'  #
-            # soup = BeautifulSoup(resp.text, 'lxml')
-            if "抱歉" in resp.text:
+            if "该应用已下架" in resp.text:
                 print("pkg: {0} 抱歉  not fount!".format(pkg))
                 return False
-            elif "相似应用下载" in resp.text:
+            elif "没有找到这个页面" in resp.text:
                 print("pkg: {0} 相似应用下载  not fount!".format(pkg))
                 return False
-            else:
-                print(pkg + "-----200----")
+            elif "app-offline-down" in resp.text:
+                print("pkg: {0} 图片(安装豌豆荚,下载相似应用)下载链接容器  not fount!".format(pkg))
+                return False
+            elif "image.uc.cn/s/uae/g/0n/wenshan/1.png" in resp.text:
+                print("pkg: {0} 图片链接  not fount!".format(pkg))
+                return False
+            elif "download-wp" in resp.text:
+                print(pkg + "---包含download-wp----200----")
                 return True
+            else:
+                print(pkg + "-----200---其他情况-----" + resp.text)
+                return False
         else:
             return False
     except Exception as e:
@@ -168,7 +172,7 @@ if __name__ == '__main__':
         work(token, begin_index, step_len)
     else:
         print("入参不对,即将开启所有的工作模式")
-        work()
+        # work()
 
     # work("", 0, 10)
     # work("", 1000, 1000)
