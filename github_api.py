@@ -4,8 +4,11 @@ import json
 import os
 
 import requests
+import urllib3
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
+urllib3.disable_warnings()
+requests.packages.urllib3.disable_warnings()
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 _VERSION = "v1.0.0"
@@ -16,6 +19,7 @@ isDebug = True
 """
 来源: https://github.com/NetCapture/PyGithubApi
 """
+
 
 # support full path: README.md、/Users/root/Desktop/test.txt, and so on
 # @TODO not support: ~/Desktop/test.txt
@@ -207,7 +211,7 @@ if __name__ == '__main__':
 
     # get info
     # https://github.com/parserpp/ip_ports/blob/main/proxyinfo.txt
-    #tss = get_content("parserpp", "ip_ports", "/proxyinfo.txt")
+    # tss = get_content("parserpp", "ip_ports", "/proxyinfo.txt")
     # print(tss)
     print(os.getenv('GITHUB_TOKEN', ""))
 

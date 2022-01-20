@@ -1,0 +1,79 @@
+
+# 豌豆荚不包含应用规则
+
+        可访问状态
+            ∧
+            |
+            |
+            |
+            |
+            |
+------------|------------> 上架状态
+            |
+            |
+            |
+            |
+            |
+
+
+
+
+## 1. 应用已下架(曾经有,不可分析)
+
+* demo: https://www.wandoujia.com/apps/com.way.smsmaster
+* 映射地址:https://www.wandoujia.com/apps/45365
+
+### 特征
+
+* selenium
+    - 状态:  没找到入口
+    - 标题: 抱歉，该应用已下架 - 豌豆荚官网
+    - 内容: 包含（抱歉，该应用已下架）
+* requests
+    - 状态:404
+    - 特殊性,resp.text里直接是完整html
+    - 内容-标题：抱歉，该应用已下架 - 豌豆荚官网
+    - 内容-包含
+        * 抱歉，该应用已下架
+        * 相似应用，小编亲测可用  -不确定是唯一
+
+## 2. 豌豆们没有找到这个页面(从未有,不可访问)
+
+* demo: https://www.wandoujia.com/apps/com.nobody.smsmasterxx
+* 未生成映射地址:
+
+
+### 特征
+
+* selenium
+    - 状态:  没找到入口
+    - 标题: 豌豆荚
+    - 内容-包含
+        * 抱歉，豌豆们没有找到这个页面...
+        * 请检查页面地址是否正确, 或者 <a href="/">返回首页</a>。
+* requests
+    - 状态:404
+    - 特殊性,resp.text里直接是完整html
+    - 内容-标题：豌豆荚
+    - 内容-包含
+        * 抱歉，豌豆们没有找到这个页面...
+        * 请检查页面地址是否正确, 或者 <a href="/">返回首页</a>。
+
+## 2. 应用已下架(曾经有,可分析)
+
+* demo: https://www.wandoujia.com/apps/app.taolessyuyinbohao
+* 映射地址: https://www.wandoujia.com/apps/36083
+
+### 特征
+
+* selenium
+    - 状态:  没找到入口
+    - 标题:
+    - 内容-包含
+        *
+* requests
+    - 状态:404
+    - 特殊性,resp.text里直接是完整html
+    - 内容-标题：
+    - 内容-包含
+        *
