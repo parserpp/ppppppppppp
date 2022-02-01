@@ -167,3 +167,5 @@ dist/
 .idea/
 pkg.csv
 *.bak
+*.html
+*.csv

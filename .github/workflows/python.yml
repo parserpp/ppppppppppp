@@ -36,7 +36,7 @@ jobs:
         shell: bash
         continue-on-error: true
         run: |
-          python update_pkg_list.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
+          python update_pkg_list_wandoujia.py  ${{ secrets.GTOKEN }} ${{ matrix.start_index }} ${{ matrix.steps }}
 
       - name: cat chromedriver
         shell: bash
