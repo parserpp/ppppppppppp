@@ -176,9 +176,9 @@ argv：
    s2: step 步长。持续数量
 """
 if __name__ == '__main__':
-    # realwork(sys.argv)
+    realwork(sys.argv)
 
-    work("", 0, 10)
+    # work("", 0, 10)
     # work("", 1000, 1000)
     # work("", 2000, 1000)
     # work("", 3000, 1000)
