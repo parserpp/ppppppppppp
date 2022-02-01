@@ -95,9 +95,16 @@ if __name__ == '__main__':
     # get("排行榜", "com.tencent.mm", "https://www.wandoujia.com/top/app")
 
 
-    print("===============单个分析======================")
-    print("===============单个分析=======================")
-    request(" 超级指南针 电子罗盘器 (应用曾上架，现状下架，可继续分析)", "com.wafcompass"
-            , "https://www.wandoujia.com/apps/com.wafcompass")
+    # print("===============单个分析======================")
+    # print("===============单个分析=======================")
+    # request(" 超级指南针 电子罗盘器 (应用曾上架，现状下架，可继续分析)", "com.wafcompass"
+    #         , "https://www.wandoujia.com/apps/com.wafcompass")
     # get(" 超级指南针 电子罗盘器 (应用曾上架，现状下架，可继续分析)", "com.wafcompass"
     #     , "https://www.wandoujia.com/apps/com.wafcompass")
+
+
+
+    print("===============应用宝======================")
+    print("===============应用宝=======================")
+    request(" 正常 ", "com.tencent.mm"
+            , "https://webcdn.m.qq.com/webapp/homepage/index.html#/appDetail?apkName=com.tencent.mm")
