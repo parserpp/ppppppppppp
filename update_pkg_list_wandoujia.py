@@ -164,6 +164,7 @@ def realwork(argv):
         begin_index = int(sys.argv[2])
         step_len = int(sys.argv[3])
         work(token, begin_index, step_len)
+        github_api.update_content("parserpp", "data", "/pkg_info_wdj.txt",_token=token, _filename=result_file)
     else:
         print("入参不对,即将开启所有的工作模式")
         # work()
